@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="si">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>මගෙ සුදූට..</title>
+
+  <!-- Heart Favicon -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700&family=Noto+Serif+Sinhala:wght@500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Background ambience -->
+  <div class="stars-layer" aria-hidden="true"></div>
+  <div class="hearts-container" id="hearts-container" aria-hidden="true"></div>
+
+  <!-- Confetti canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Main wrapper -->
+  <main class="page-wrapper">
+    <div class="card-container">
+
+      <!-- Step 1: The Question -->
+      <section id="step-question" class="step-card active" aria-labelledby="question-heading">
+        <div class="quote top-quote" id="top-quote"></div>
+
+        <div class="badge-icon" aria-hidden="true">💌</div>
+
+        <h1 class="main-heading" id="question-heading"></h1>
+        <p class="subtitle" id="question-subtitle"></p>
+
+        <div class="begging-box" id="begging-box" aria-live="polite"></div>
+
+        <!-- Yes/No buttons -->
+        <div class="button-zone" id="button-zone">
+          <button type="button" class="btn btn-yes" id="yes-btn">
+            <span class="btn-text" id="yes-btn-text"></span>
+          </button>
+          <button type="button" class="btn btn-no" id="no-btn">
+            <span class="btn-text" id="no-btn-text"></span>
+          </button>
+        </div>
+
+        <div class="quote middle-quote" id="question-quote"></div>
+      </section>
+
+      <!-- Step 2: Pick a Day -->
+      <section id="step-pick-day" class="step-card hidden" aria-labelledby="pick-day-heading">
+        <div class="quote top-quote" id="pick-day-quote"></div>
+
+        <div class="badge-icon" aria-hidden="true"></div>
+
+        <h2 class="main-heading" id="pick-day-heading"></h2>
+        <p class="subtitle" id="pick-day-subtitle"></p>
+
+        <!-- Mini photo string slot -->
+        <div id="photo-mini-slot" class="photo-slot photo-slot-mini"></div>
+
+        <!-- Proposed dates -->
+        <div class="dates-list" id="proposed-dates-list" role="radiogroup" aria-label="Available dates">
+          <!-- Dynamically populated from CONFIG.proposedDates -->
+        </div>
+
+        <!-- Time picker section -->
+        <div class="proposed-time-section hidden" id="proposed-time-section" aria-live="polite">
+          <h3 class="time-picker-heading" id="pick-time-heading"></h3>
+          <div class="time-picker-wrapper">
+            <input type="time" id="proposed-time-input" class="date-picker-input proposed-time-field">
+          </div>
+          <!-- Quick time chips -->
+          <div class="quick-time-chips" id="quick-time-chips"></div>
+          <p class="time-picker-hint" id="pick-time-hint"></p>
+        </div>
+
+        <!-- Morning note -->
+        <div class="morning-note" id="morning-note"></div>
+
+        <!-- Custom date section -->
+        <div class="custom-date-section" id="custom-date-section">
+          <button type="button" class="custom-toggle-btn" id="custom-toggle-btn" aria-expanded="false">
+            <span class="custom-icon" aria-hidden="true">📅</span>
+            <span class="custom-toggle-text" id="none-of-these-text"></span>
+          </button>
+
+          <div class="custom-inputs-collapse" id="custom-inputs-collapse">
+            <div class="custom-inputs-grid">
+              <div class="input-field-group">
+                <label for="custom-date-input" id="custom-date-label"></label>
+                <input type="date" id="custom-date-input" class="date-picker-input">
+              </div>
+              <div class="input-field-group">
+                <label for="custom-time-input" id="custom-time-label"></label>
+                <input type="time" id="custom-time-input" class="time-picker-input">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Confirm button -->
+        <button type="button" class="btn btn-confirm" id="confirm-date-btn" disabled>
+          <span class="btn-text" id="confirm-btn-text"></span>
+        </button>
+      </section>
+
+      <!-- Step 3: Final Card -->
+      <section id="step-final" class="step-card hidden" aria-labelledby="final-heading">
+        <div class="badge-icon pulse-animation" aria-hidden="true">💖</div>
+
+        <h2 class="main-heading" id="final-heading"></h2>
+
+        <!-- Event summary -->
+        <div class="event-summary-box">
+          <div class="summary-item">
+            <span class="summary-icon" aria-hidden="true">📅</span>
+            <div class="summary-content">
+              <span class="summary-label" id="summary-date-label"></span>
+              <strong class="summary-value" id="summary-date"></strong>
+            </div>
+          </div>
+          <div class="summary-item">
+            <span class="summary-icon" aria-hidden="true">⏰</span>
+            <div class="summary-content">
+              <span class="summary-label" id="summary-time-label"></span>
+              <strong class="summary-value" id="summary-time"></strong>
+            </div>
+          </div>
+          <div class="summary-item">
+            <span class="summary-icon" aria-hidden="true">📍</span>
+            <div class="summary-content">
+              <span class="summary-label" id="summary-place-label"></span>
+              <strong class="summary-value" id="summary-place"></strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Final message -->
+        <p class="final-paragraph" id="final-message-para"></p>
+
+        <!-- Full photo string slot -->
+        <div id="photo-full-slot" class="photo-slot photo-slot-full"></div>
+
+        <div class="quote middle-quote" id="after-confirm-quote"></div>
+
+        <!-- Action buttons -->
+        <div class="final-actions-list">
+          <a id="whatsapp-link" class="btn btn-action btn-whatsapp" href="#" target="_blank" rel="noopener noreferrer">
+            <span class="action-icon" aria-hidden="true">💬</span>
+            <span class="btn-text" id="whatsapp-btn-text"></span>
+          </a>
+          <button type="button" class="btn btn-action btn-calendar" id="calendar-btn">
+            <span class="action-icon" aria-hidden="true">📅</span>
+            <span class="btn-text" id="calendar-btn-text"></span>
+          </button>
+          <a id="maps-link" class="btn btn-action btn-maps" href="#" target="_blank" rel="noopener noreferrer">
+            <span class="action-icon" aria-hidden="true">📍</span>
+            <span class="btn-text" id="maps-btn-text"></span>
+          </a>
+        </div>
+
+        <!-- Change date option -->
+        <div class="change-selection-wrap">
+          <button type="button" class="btn-change-date" id="change-date-btn">
+            <span class="btn-text" id="change-date-btn-text"></span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Footer quote -->
+      <footer class="card-footer">
+        <p class="quote footer-quote" id="footer-quote"></p>
+      </footer>
+    </div>
+
+    <!-- Whisper bubbles container -->
+    <div class="whisper-container" id="whisper-container" aria-live="polite"></div>
+  </main>
+
+  <!-- Final rejected screen -->
+  <div id="final-rejected-screen" class="final-rejected-screen hidden" aria-live="polite">
+    <p class="final-rejected-text" id="final-rejected-text"></p>
+  </div>
+
+  <!-- Story viewer modal -->
+  <div id="story-viewer-modal" class="story-viewer-modal hidden" role="dialog" aria-modal="true"
+    aria-label="Photo Story Viewer">
+    <!-- Story backdrop -->
+    <div class="story-backdrop" id="story-backdrop"></div>
+    <div class="story-tint-overlay"></div>
+
+    <!-- Story header -->
+    <div class="story-header">
+      <div class="story-progress-bar-container" id="story-progress-container"></div>
+      <button type="button" class="story-close-btn" id="story-close-btn" aria-label="Close story">&times;</button>
+    </div>
+
+    <!-- Story stage -->
+    <div class="story-stage" id="story-stage">
+      <!-- Floating hearts -->
+      <div class="story-floating-hearts" id="story-floating-hearts" aria-hidden="true"></div>
+
+      <!-- Story slide -->
+      <div class="story-slide-wrap" id="story-slide-wrap">
+        <div class="story-img-card" id="story-img-card">
+          <img id="story-img" class="story-img" src="" alt="Story photo" />
+        </div>
+        <p class="story-caption" id="story-caption"></p>
+      </div>
+
+      <!-- Final story slide -->
+      <div class="story-final-slide hidden" id="story-final-slide">
+        <div class="story-final-heart-burst" aria-hidden="true">🥰</div>
+        <p class="story-final-text" id="story-final-text"></p>
+        <button type="button" class="btn btn-story-close-final" id="story-close-final-btn">
+          <span class="btn-text">Close</span>
+        </button>
+      </div>
+
+      <!-- Story tap navigation -->
+      <div class="story-nav-tap story-nav-prev" id="story-tap-prev" aria-label="Previous photo"></div>
+      <div class="story-nav-tap story-nav-next" id="story-tap-next" aria-label="Next photo"></div>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+
+</html>
